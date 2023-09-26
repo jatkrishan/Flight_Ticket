@@ -3,11 +3,11 @@ const User = require("../Module/user")
 
 exports.validactionVerify = async function (req, res, next){
          
-   let body = req.body;
+   const {email,username, password} = req.body;
    
    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
      
-    let isValidate = emailRegex.test(body.email);
+    let isValidate = emailRegex.test(email);
        
     if(isValidate === false){
          
@@ -15,25 +15,25 @@ exports.validactionVerify = async function (req, res, next){
        
       }
     
-    
-    if(!body.username || typeof(body.username) != "string")
+
+    if(!username || typeof(username) != "string")
     
        return res.status(400).json({sucess: false , message: "Faild! please enter username"})
 
-      if(!body.password || typeof(body.password) != "string") 
+      if(!password || typeof(password) != "string") 
           
       return res.status(400).json({sucess: false , message: "Faild! please enter password"})
 
     
-    if(!body.email || typeof(body.email) != "string")
+    if(!email || typeof(email) != "string")
     
-       res.status(400).json({sucess: false , message: "Faild! email isn't valid"})
+      return res.status(400).json({sucess: false , message: "Faild! email isn't valid"})
 
-    const email = await User.findOne({email: body.email})  
+    const isValidMail = await User.findOne({email: email})  
      
-    if(email)
+    if(isValidMail)
 
-     res.status(400).json({sucess: false , message: "Faild! email alredy present"})
+    return res.status(400).json({sucess: false , message: "Faild! email alredy present"})
 
 
 
