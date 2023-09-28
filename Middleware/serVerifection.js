@@ -10,9 +10,9 @@ exports.isValidUser = async function(req, res, next){
       
     try{
       
-        if(!token){
-        return res.status(400).json({sucess: false, message: "Please enter a token"})
-        }
+        if(!token)  return res.status(400).json({sucess: false, message: "Please enter a token"})
+       
+        
         
    
         jwt.verify(token, configKey.secretKey, (error, decoded) => {
@@ -46,8 +46,9 @@ exports.isAdmin = async function async(req, res, next){
           let isValidAdmin = await User.findOne({_id: req.userId})
           
 
-          if(isValidAdmin.role != constent.roleType.admin)
-              return res.status(400).json({sucess: false, message: "Faild! only admin allowed"})
+          if(isValidAdmin.role != constent.roleType.admin)  
+         return res.status(400).json({sucess: false, message: "Faild! only admin allowed"})
+            
 
               next()
 

@@ -39,6 +39,7 @@ const flightSchema = new mongoose.Schema({
     },
     boardingGate : {
          type: Number,
+         require: true
     }
 
 }, {timestamps: true})

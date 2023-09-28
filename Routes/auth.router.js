@@ -1,5 +1,5 @@
 const validactionVerify = require("../Middleware/validactionVerify.middleware")
-const authController  = require("../Controller/auth.controller")
+const authController  = require("../Controller/Auth.controller")
 
 
 module.exports = function(app){

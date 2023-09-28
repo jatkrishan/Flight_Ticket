@@ -9,31 +9,27 @@ exports.validactionVerify = async function (req, res, next){
      
     let isValidate = emailRegex.test(email);
        
-    if(isValidate === false){
+    if(isValidate === false)     return res.status(400).json({sucess:false , message: "Faild! invalid email id"})
          
-       return res.status(400).json({sucess:false , message: "Faild! invalid email id"})
-       
-      }
     
 
-    if(!username || typeof(username) != "string")
+    if(!username || typeof(username) != "string")  return res.status(400).json({sucess: false , message: "Faild! please enter username"})
     
-       return res.status(400).json({sucess: false , message: "Faild! please enter username"})
+ 
 
-      if(!password || typeof(password) != "string") 
+      if(!password || typeof(password) != "string") return res.status(400).json({sucess: false , message: "Faild! please enter password"})
           
-      return res.status(400).json({sucess: false , message: "Faild! please enter password"})
-
+      
     
-    if(!email || typeof(email) != "string")
+    if(!email || typeof(email) != "string") return res.status(400).json({sucess: false , message: "Faild! email isn't valid"})
     
-      return res.status(400).json({sucess: false , message: "Faild! email isn't valid"})
+      
 
     const isValidMail = await User.findOne({email: email})  
      
-    if(isValidMail)
+    if(isValidMail) return res.status(400).json({sucess: false , message: "Faild! email alredy present"})
 
-    return res.status(400).json({sucess: false , message: "Faild! email alredy present"})
+    
 
 
 

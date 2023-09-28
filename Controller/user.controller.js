@@ -1,16 +1,39 @@
 const User = require("../Module/user")
 
-exports.getByIdUser = async function(req, res){
-   let {id} = req.params.id
+exports.getUserById = async function(req, res){
+   let {userId} = req.params.userId
      
    try{
-         if(!id){
-            res.status(400).json({sucess: false, message: "Please enter a id"})
-         }
-            let user = await User.findOne({email: id}).select({password: 0})
-         if(!user){
-            res.status(400).json({sucess: false, message: "Please enter a valid id"})
-         }
+         if(!userId) return res.status(400).json({sucess: false, message: "Faild! User not found"})
+            
+         
+            let user = await User.findOne({email: userId}).select({password: 0})
+
+         if(!user)  return res.status(400).json({sucess: false, message: "Please enter a valid userId"})
+           
+
+          res.status(200).json({sucess: true, user})
+
+   }catch(error){
+     return res.status(500).json({sucess: false, message: "Some internal server error occured"})
+   }
+}
+
+
+
+exports.getUserByIdAdmin = async function(req, res){
+
+   let {userId} = req.params.userId
+     
+   try{
+
+      let isUser = await User.findOne({email: userId})
+
+         if(!isUser || !userId) return res.status(400).json({sucess: false, message: "Please enter a userId"})
+           
+         
+         let  user = await User.findOne({email: userId}).select({password: 0})
+         
 
        res.status(200).json({sucess: true, user})
 
@@ -21,42 +44,19 @@ exports.getByIdUser = async function(req, res){
 
 
 
-exports.getByIdAdmon = async function(req, res){
 
-   let {id} = req.params.id
+
+exports.getAllUser = async function(req, res){
+
+   let {userId} = req.params.userId
      
    try{
-         if(!id){
-            res.status(400).json({sucess: false, message: "Please enter a id"})
-         }
-            let user = await User.findOne({email: id}).select({password: 0})
-         if(!user){
-            res.status(400).json({sucess: false, message: "Please enter a valid id"})
-         }
+      let allUser = await User.find({email: userId})
 
-       res.status(200).json({sucess: true, user})
-
-   }catch(error){
-      res.status(500).json({sucess: false, message: "Some internal server error occured"})
-   }
-}
-
-
-
-
-
-exports.getByAll = async function(req, res){
-
-   let {id} = req.params.id
-     
-   try{
-         if(!id){
-            res.status(400).json({sucess: false, message: "Please enter a id"})
-         }
-            let user = await User.find({email: id}).select({password: 0})
-         if(!user){
-            res.status(400).json({sucess: false, message: "Please enter a valid id"})
-         }
+         if(!userId || !allUser) return res.status(400).json({sucess: false, message: "Please enter a userId"})
+            
+         
+       let user = await User.find({email: userId}).select({password: 0})
 
        res.status(200).json({sucess: true, user})
 
@@ -68,20 +68,18 @@ exports.getByAll = async function(req, res){
 
     
 
-exports.updateByIdAdmin = async function(req, res){
+exports.updateUserById = async function(req, res){
 
-   let {id} = req.params.id
+   let {userId} = req.params.userId
      
    try{
-         if(!id){
-            res.status(400).json({sucess: false, message: "Please enter a id"})
-         }
-            let user = await User.updateOne({email: id}, {$set:{username: req.body.username}}).select({password: 0})
 
-         if(!user){
+      let isValid = await User.findOne({email: userId})
 
-            res.status(400).json({sucess: false, message: "Please enter a valid id"})
-         }
+         if(!userId || !isValid)  return res.status(400).json({sucess: false, message: "Please enter a userId"})
+           
+       await User.updateOne({email: userId}, {$set:{username: req.body.username}}).select({password: 0})
+
 
        res.status(200).json({sucess: true, message: "User update sucessfully"})
 
@@ -92,21 +90,18 @@ exports.updateByIdAdmin = async function(req, res){
 
 
 
-exports.deleteByIdAdmin = async function(req, res){
+exports.deleteUserById = async function(req, res){
 
 
-   let {id} = req.params.id
+   let {userId} = req.params.userId
      
    try{
-         if(!id){
-            res.status(400).json({sucess: false, message: "Please enter a id"})
-         }
-            let user = await User.deleteOne({email: id})
+      let isUser = await User.findOne({email: userId})
 
-         if(!user){
-
-            res.status(400).json({sucess: false, message: "Please enter a valid id"})
-         }
+         if(!isUser) return res.status(400).json({sucess: false, message: "Please enter a userId"})
+           
+         
+            await User.deleteOne({email: userId})
 
        res.status(200).json({sucess: true, message: "User delete sucessfully"})
 

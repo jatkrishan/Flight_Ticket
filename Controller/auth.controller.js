@@ -12,9 +12,9 @@ exports.signup = async function(req, res){
           })
         
           try{
-            if(user){
-                res.status(200).json({sucess: true, message: "Regestraction sucessfully"})
-            }
+            if(user) res.status(200).json({sucess: true, message: "Regestraction sucessfully"})
+            
+                
 
         }catch(error){
             res.status(500).json({sucess:false, message:'Error Occured in SignUp Process' + error.message})
@@ -32,18 +32,19 @@ exports.signin = async function(req, res){
       try{
   
    
-      if(!user){
-        res.status(400).json({sucess:false, message:'Error! User not found'})
-    }
+      if(!user)  return res.status(400).json({sucess:false, message:'Error! User not found'})
+      
+    
          
     var isValid= bcrypt.compareSync(password, user.password)
 
-    if(!isValid){
-        res.status(400).json({sucess:false, message:'Error! passwrd is invalid'})
-    }
+    if(!isValid)  return res.status(400).json({sucess:false, message:'Error! passwrd is invalid'})
+      
+    
    
     var token = jwt.sign({id: user.id}, authKey.secretKey, {
         expiresIn: "1d"
+    
     })
     
         res.status(200).json({userId: user.userId, userType: user.userType, accessToken: token})
